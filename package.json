@@ -1,66 +1,66 @@
 {
-    "name": "fachascript",
-    "displayName": "FachaScript",
-    "description": "FachaScript es un lenguaje de programación con sintaxis simple y flexible.",
-    "version": "0.1.0",
-    "publisher": "PibeEmojiStudios",
-    "repository": {
-      "type": "git",
-      "url": "https://github.com/Mangelrex7778/fachascript-vscode-extension"
-    },
-    "license": "MIT",
-    "engines": {
-      "vscode": "^1.0.0"
-    },
-    "categories": [
-      "Programming Languages"
+  "icon": "images/logo.png",
+  "name": "fachascript",
+  "displayName": "FachaScript",
+  "description": "FachaScript es un lenguaje de programación con sintaxis simple y flexible.",
+  "version": "0.1.0",
+  "publisher": "PibeEmojiStudios",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Mangelrex7778/fachascript-vscode-extension" 
+  },
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.0.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "activationEvents": [
+    "onLanguage:fachascript-indentado",
+    "onLanguage:fachascript-brackets"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "fachascript-indentado",
+        "extensions": [".fch", ".facha"],
+        "aliases": ["FachaScript Indentado"]
+      },
+      {
+        "id": "fachascript-brackets",
+        "extensions": [".fchs"],
+        "aliases": ["FachaScript Brackets"]
+      }
     ],
-    "activationEvents": [
-      "onLanguage:fachascript-indentado",
-      "onLanguage:fachascript-brackets"
+    "grammars": [
+      {
+        "language": "fachascript-indentado",
+        "scopeName": "source.fachascript-indentado",
+        "path": "./syntaxes/fachascript-indentado.tmLanguage.json"
+      },
+      {
+        "language": "fachascript-brackets",
+        "scopeName": "source.fachascript-brackets",
+        "path": "./syntaxes/fachascript-brackets.tmLanguage.json"
+      }
     ],
-    "main": "./extension.js",
-    "contributes": {
-      "languages": [
-        {
-          "id": "fachascript-indentado",
-          "extensions": [".fch", ".facha"],
-          "aliases": ["FachaScript Indentado"]
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "fachascript-indentado": {
+          "type": "string",
+          "default": "value"
         },
-        {
-          "id": "fachascript-brackets",
-          "extensions": [".fchs"],
-          "aliases": ["FachaScript Brackets"]
-        }
-      ],
-      "grammars": [
-        {
-          "language": "fachascript-indentado",
-          "scopeName": "source.fachascript-indentado",
-          "path": "./syntaxes/fachascript-indentado.tmLanguage.json"
-        },
-        {
-          "language": "fachascript-brackets",
-          "scopeName": "source.fachascript-brackets",
-          "path": "./syntaxes/fachascript-brackets.tmLanguage.json"
-        }
-      ],
-      "configuration": {
-        "type": "object",
-        "properties": {
-          "fachascript-indentado": {
-            "type": "string",
-            "default": "value"
-          },
-          "fachascript-brackets": {
-            "type": "string",
-            "default": "value"
-          }
+        "fachascript-brackets": {
+          "type": "string",
+          "default": "value"
         }
       }
-    },
-    "scripts": {
-      "prepublish": "vsce package"
     }
+  },
+  "scripts": {
+    "prepublish": "vsce package"
   }
-  
+}
