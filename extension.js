@@ -1,83 +1,52 @@
 const vscode = require('vscode');
-const path = require('path');
-const exec = require('child_process').exec;
+const fachascriptCommands = require('./fachascript_indentado.js');
+const fachascriptLinter = require('./fachascript_indentado_error.js');
+const fachascriptEjecutar = require('./fachascript_indentado_ejecutar.js');
 
-// Función para ejecutar un archivo .exe en el sistema
-function runExecutable(executablePath, args = []) {
-    return new Promise((resolve, reject) => {
-        exec(`"${executablePath}" ${args.join(' ')}`, (error, stdout, stderr) => {
-            if (error) {
-                reject(`Error executing ${executablePath}: ${stderr || error.message}`);
-            } else {
-                resolve(stdout);
-            }
-        });
-    });
-}
-
-// Comando para ejecutar FachaScript Normal
-async function runFachaScriptNormal() {
-    const executablePath = path.join(__dirname, 'scripts', 'fachascript_indentado_ejecutor.exe');
-    try {
-        const result = await runExecutable(executablePath);
-        vscode.window.showInformationMessage('FachaScript Normal ejecutado exitosamente!');
-        console.log(result);
-    } catch (error) {
-        vscode.window.showErrorMessage('Error al ejecutar FachaScript Normal: ' + error);
-    }
-}
-
-// Comando para detectar errores en FachaScript Normal
-async function checkFachaScriptNormalErrors() {
-    const executablePath = path.join(__dirname, 'scripts', 'fachascript_indentado_error.exe');
-    try {
-        const result = await runExecutable(executablePath);
-        vscode.window.showInformationMessage('Errores de FachaScript Normal detectados!');
-        console.log(result);
-    } catch (error) {
-        vscode.window.showErrorMessage('Error al verificar errores de FachaScript Normal: ' + error);
-    }
-}
-
-// Comando para ejecutar FachaScript Brackets
-async function runFachaScriptBrackets() {
-    const executablePath = path.join(__dirname, 'scripts', 'fachascript_brackets_runner.exe');
-    try {
-        const result = await runExecutable(executablePath);
-        vscode.window.showInformationMessage('FachaScript Brackets ejecutado exitosamente!');
-        console.log(result);
-    } catch (error) {
-        vscode.window.showErrorMessage('Error al ejecutar FachaScript Brackets: ' + error);
-    }
-}
-
-// Comando para detectar errores en FachaScript Brackets
-async function checkFachaScriptBracketsErrors() {
-    const executablePath = path.join(__dirname, 'scripts', 'fachascript_brackets_checker.exe');
-    try {
-        const result = await runExecutable(executablePath);
-        vscode.window.showInformationMessage('Errores de FachaScript Brackets detectados!');
-        console.log(result);
-    } catch (error) {
-        vscode.window.showErrorMessage('Error al verificar errores de FachaScript Brackets: ' + error);
-    }
-}
-
-// Activar la extensión
 function activate(context) {
-    // Comandos para ejecutar FachaScript Normal
-    let runFachaScriptNormalCommand = vscode.commands.registerCommand('fachascript.runFachaScriptNormal', runFachaScriptNormal);
-    let checkFachaScriptNormalErrorsCommand = vscode.commands.registerCommand('fachascript.checkFachaScriptNormalErrors', checkFachaScriptNormalErrors);
+    console.log('¡La extensión FachaScript está activa!');
 
-    // Comandos para ejecutar FachaScript Brackets
-    let runFachaScriptBracketsCommand = vscode.commands.registerCommand('fachascript.runFachaScriptBrackets', runFachaScriptBrackets);
-    let checkFachaScriptBracketsErrorsCommand = vscode.commands.registerCommand('fachascript.checkFachaScriptBracketsErrors', checkFachaScriptBracketsErrors);
+    // Crear una colección de diagnósticos
+    const diagnosticCollection = vscode.languages.createDiagnosticCollection('fachascript');
+    context.subscriptions.push(diagnosticCollection);
 
-    context.subscriptions.push(runFachaScriptNormalCommand, checkFachaScriptNormalErrorsCommand, runFachaScriptBracketsCommand, checkFachaScriptBracketsErrorsCommand);
+    // Función para actualizar los diagnósticos
+    function updateDiagnostics(document) {
+        if (document && document.languageId === 'fachascript-indentado') {
+            const diagnostics = fachascriptLinter.analyzeDocument(document);
+            diagnosticCollection.set(document.uri, diagnostics);
+        }
+    }
+
+    // Suscribirse a los eventos de cambio y guardado del documento
+    context.subscriptions.push(
+        vscode.workspace.onDidChangeTextDocument(event => updateDiagnostics(event.document))
+    );
+    context.subscriptions.push(
+        vscode.workspace.onDidSaveTextDocument(document => updateDiagnostics(document))
+    );
+    context.subscriptions.push(
+        vscode.workspace.onDidOpenTextDocument(document => updateDiagnostics(document))
+    );
+
+    // Diagnosticar el documento activo al activar la extensión
+    if (vscode.window.activeTextEditor) {
+        updateDiagnostics(vscode.window.activeTextEditor.document);
+    }
+
+    // Comando para ejecutar el código
+    let executeCommand = vscode.commands.registerCommand('fachascript.ejecutar', () => {
+        if (vscode.window.activeTextEditor) {
+            const document = vscode.window.activeTextEditor.document;
+            fachascriptEjecutar.executeDocument(document, vscode.window.createOutputChannel('FachaScript Ejecución'));
+        } else {
+            vscode.window.showInformationMessage('No hay un documento activo.');
+        }
+    });
+    context.subscriptions.push(executeCommand);
 }
 
-// Desactivar la extensión
-function deactivate() {}
+function deactivate() { }
 
 module.exports = {
     activate,
