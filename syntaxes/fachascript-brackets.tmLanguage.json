@@ -1,21 +1,15 @@
 {
     "fileTypes": ["fchs"],
+    "scopeName": "source.fachascript-brackets",
     "patterns": [
-        {
-            "name": "comment.line.double-slash.fachascript",
-            "match": "//.*$"
-        },
-        {
-            "name": "keyword.control.fachascript",
-            "match": "\\b(imprimir|crear|asignar|sumar|restar|multiplicar|dividir|si|mientras|para|definir|retornar)\\b"
-        },
-        {
-            "name": "variable.language.fachascript",
-            "match": "\\b(verdadero|falso|nulo|cero|uno|pi|e|vacio|usuario|sistema|ruta|memoria_libre|cpu|procesos|version|archivos|red_ip|mode_terminal|contador|indice|limite|iteracion_actual|estado_bucle|entrada|salida|error|resultado|hoy|ahora|zona_horaria|tiempo_inicio|tiempo_ejecucion|facha_version|facha_sistema|facha_errores|facha_ruta_script|facha_lenguaje|facha_config)\\b"
-        },
-        {
-            "name": "punctuation.definition.block.fachascript",
-            "match": "(\\{|\\})"
-        }
+      {
+        "match": "(TODO)",
+        "name": "comment.line.todo.fachascript-brackets"
+      },
+      {
+        "match": "(\\b(if|else|while|return|function|var)\\b)",
+        "name": "keyword.control.fachascript-brackets"
+      }
     ]
-}
+  }
+  
