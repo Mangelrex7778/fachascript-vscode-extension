@@ -3,11 +3,11 @@
   "name": "fachascript",
   "displayName": "FachaScript",
   "description": "FachaScript es un lenguaje de programación con sintaxis simple y flexible.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "PibeEmojiStudios",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Mangelrex7778/fachascript-vscode-extension" 
+    "url": "https://github.com/Mangelrex7778/fachascript-vscode-extension"
   },
   "license": "MIT",
   "engines": {
@@ -58,7 +58,40 @@
           "default": "value"
         }
       }
-    }
+    },
+    "fileAssociations": [
+      {
+        "language": "fachascript-indentado",
+        "pattern": "*.fch"
+      },
+      {
+        "language": "fachascript-indentado",
+        "pattern": "*.facha"
+      },
+      {
+        "language": "fachascript-brackets",
+        "pattern": "*.fchs"
+      }
+    ]
+  },
+  "windows": {
+    "fileAssociations": [
+      {
+        "ext": ".fch",
+        "description": "Archivo de Origen FachaScript",
+        "icon": "images/fchascript-icon.png"
+      },
+      {
+        "ext": ".facha",
+        "description": "Archivo de Origen FachaScript",
+        "icon": "images/fchascript-icon.png"
+      },
+      {
+        "ext": ".fchs",
+        "description": "Archivo de Origen FachaScript Brackets",
+        "icon": "images/fchascript-brackets-icon.png"
+      }
+    ]
   },
   "scripts": {
     "prepublish": "vsce package"
