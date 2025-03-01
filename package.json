@@ -3,7 +3,7 @@
   "name": "fachascript",
   "displayName": "FachaScript",
   "description": "FachaScript es un lenguaje de programación con sintaxis simple y flexible.",
-  "version": "0.1.1b",
+  "version": "0.1.3",
   "publisher": "PibeEmojiStudios",
   "repository": {
     "type": "git",
@@ -46,33 +46,98 @@
         "path": "./syntaxes/fachascript-brackets.tmLanguage.json"
       }
     ],
-    "configuration": {
-      "type": "object",
-      "properties": {
-        "fachascript-indentado": {
-          "type": "string",
-          "default": "value"
-        },
-        "fachascript-brackets": {
-          "type": "string",
-          "default": "value"
-        }
-      }
-    },
-    "fileIcons": [
+    "commands": [
       {
-        "icon": "images/fchascript-icon.png",
-        "language": "fachascript-indentado",
-        "extensions": [".fch", ".facha"]
+        "command": "fachascript.ejecutarIndentado",
+        "title": "Ejecutar FachaScript Indentado",
+        "category": "FachaScript"
       },
       {
-        "icon": "images/fchascript-brackets-icon.png",
+        "command": "fachascript.ejecutarBrackets",
+        "title": "Ejecutar FachaScript Brackets",
+        "category": "FachaScript"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "fachascript.ejecutarIndentado",
+          "group": "navigation",
+          "when": "editorLangId == fachascript-indentado"
+        },
+        {
+          "command": "fachascript.ejecutarBrackets",
+          "group": "navigation",
+          "when": "editorLangId == fachascript-brackets"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "fachascript.ejecutarIndentado",
+          "group": "navigation",
+          "when": "editorLangId == fachascript-indentado"
+        },
+        {
+          "command": "fachascript.ejecutarBrackets",
+          "group": "navigation",
+          "when": "editorLangId == fachascript-brackets"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "fachascript.ejecutarIndentado",
+        "key": "ctrl+alt+n",
+        "mac": "cmd+alt+n",
+        "when": "editorTextFocus && editorLangId == fachascript-indentado"
+      },
+      {
+        "command": "fachascript.ejecutarBrackets",
+        "key": "ctrl+shift+alt+n",
+        "mac": "cmd+shift+alt+n",
+        "when": "editorTextFocus && editorLangId == fachascript-brackets"
+      }
+    ],
+    "fileAssociations": [
+      {
+        "language": "fachascript-indentado",
+        "pattern": "*.fch"
+      },
+      {
+        "language": "fachascript-indentado",
+        "pattern": "*.facha"
+      },
+      {
         "language": "fachascript-brackets",
-        "extensions": [".fchs"]
+        "pattern": "*.fchs"
+      }
+    ]
+  },
+  "windows": {
+    "fileAssociations": [
+      {
+        "ext": ".fch",
+        "description": "Archivo de Origen FachaScript Indentado",
+        "icon": "images/fchascript-icon.png"
+      },
+      {
+        "ext": ".facha",
+        "description": "Archivo de Origen FachaScript Indentado",
+        "icon": "images/fchascript-icon.png"
+      },
+      {
+        "ext": ".fchs",
+        "description": "Archivo de Origen FachaScript Brackets",
+        "icon": "images/fchascript-brackets-icon.png"
       }
     ]
   },
   "scripts": {
     "prepublish": "vsce package"
+  },
+  "dependencies": {
+    "psutil": "^5.9.5",
+    "luxon": "^3.4.4",
+    "time": "^0.12.0"
   }
 }
