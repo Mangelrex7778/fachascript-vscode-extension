@@ -1,1 +1,16 @@
+{
+    "fileTypes": ["fch", "facha"],
+    "scopeName": "source.fachascript-indentado",
+    "patterns": [
+      {
+        "match": "(TODO)",
+        "name": "comment.line.todo.fachascript-indentado"
+      },
+      {
+        "match": "(\\b(if|else|while|return|function|var)\\b)",
+        "name": "keyword.control.fachascript-indentado"
+      }
+    ]
+  }
+  
 
