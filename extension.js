@@ -1,58 +1,85 @@
 const vscode = require('vscode');
-const fs = require('fs');
 const path = require('path');
-const { exec } = require('child_process');
+const exec = require('child_process').exec;
 
-// Función para ejecutar FachaScript Indentado
-function ejecutarFachaScriptIndentado() {
-    const editor = vscode.window.activeTextEditor;
-    if (editor) {
-        const codigo = editor.document.getText();
-        const archivo = editor.document.fileName;
-
-        exec(`python3 ./scripts/fachascript_indentado_ejecutor.py "${archivo}"`, (err, stdout, stderr) => {
-            if (err) {
-                vscode.window.showErrorMessage(`Error al ejecutar FachaScript: ${stderr}`);
+// Función para ejecutar un archivo .exe en el sistema
+function runExecutable(executablePath, args = []) {
+    return new Promise((resolve, reject) => {
+        exec(`"${executablePath}" ${args.join(' ')}`, (error, stdout, stderr) => {
+            if (error) {
+                reject(`Error executing ${executablePath}: ${stderr || error.message}`);
             } else {
-                vscode.window.showInformationMessage(`Resultado: ${stdout}`);
+                resolve(stdout);
             }
         });
+    });
+}
+
+// Comando para ejecutar FachaScript Normal
+async function runFachaScriptNormal() {
+    const executablePath = path.join(__dirname, 'scripts', 'fachascript_indentado_ejecutor.exe');
+    try {
+        const result = await runExecutable(executablePath);
+        vscode.window.showInformationMessage('FachaScript Normal ejecutado exitosamente!');
+        console.log(result);
+    } catch (error) {
+        vscode.window.showErrorMessage('Error al ejecutar FachaScript Normal: ' + error);
     }
 }
 
-// Función para ejecutar FachaScript Brackets
-function ejecutarFachaScriptBrackets() {
-    const editor = vscode.window.activeTextEditor;
-    if (editor) {
-        const codigo = editor.document.getText();
-        const archivo = editor.document.fileName;
-
-        exec(`python3 ./scripts/fachascript_brackets_runner.py "${archivo}"`, (err, stdout, stderr) => {
-            if (err) {
-                vscode.window.showErrorMessage(`Error al ejecutar FachaScript Brackets: ${stderr}`);
-            } else {
-                vscode.window.showInformationMessage(`Resultado: ${stdout}`);
-            }
-        });
+// Comando para detectar errores en FachaScript Normal
+async function checkFachaScriptNormalErrors() {
+    const executablePath = path.join(__dirname, 'scripts', 'fachascript_indentado_error.exe');
+    try {
+        const result = await runExecutable(executablePath);
+        vscode.window.showInformationMessage('Errores de FachaScript Normal detectados!');
+        console.log(result);
+    } catch (error) {
+        vscode.window.showErrorMessage('Error al verificar errores de FachaScript Normal: ' + error);
     }
 }
 
-// Registrar los comandos
-function activar(context) {
-    let ejecutarIndentado = vscode.commands.registerCommand('fachascript.runIndentado', () => {
-        ejecutarFachaScriptIndentado();
-    });
-
-    let ejecutarBrackets = vscode.commands.registerCommand('fachascript.runBrackets', () => {
-        ejecutarFachaScriptBrackets();
-    });
-
-    context.subscriptions.push(ejecutarIndentado);
-    context.subscriptions.push(ejecutarBrackets);
+// Comando para ejecutar FachaScript Brackets
+async function runFachaScriptBrackets() {
+    const executablePath = path.join(__dirname, 'scripts', 'fachascript_brackets_runner.exe');
+    try {
+        const result = await runExecutable(executablePath);
+        vscode.window.showInformationMessage('FachaScript Brackets ejecutado exitosamente!');
+        console.log(result);
+    } catch (error) {
+        vscode.window.showErrorMessage('Error al ejecutar FachaScript Brackets: ' + error);
+    }
 }
 
-exports.activate = activar;
+// Comando para detectar errores en FachaScript Brackets
+async function checkFachaScriptBracketsErrors() {
+    const executablePath = path.join(__dirname, 'scripts', 'fachascript_brackets_checker.exe');
+    try {
+        const result = await runExecutable(executablePath);
+        vscode.window.showInformationMessage('Errores de FachaScript Brackets detectados!');
+        console.log(result);
+    } catch (error) {
+        vscode.window.showErrorMessage('Error al verificar errores de FachaScript Brackets: ' + error);
+    }
+}
 
-function desactivar() {}
+// Activar la extensión
+function activate(context) {
+    // Comandos para ejecutar FachaScript Normal
+    let runFachaScriptNormalCommand = vscode.commands.registerCommand('fachascript.runFachaScriptNormal', runFachaScriptNormal);
+    let checkFachaScriptNormalErrorsCommand = vscode.commands.registerCommand('fachascript.checkFachaScriptNormalErrors', checkFachaScriptNormalErrors);
 
-exports.deactivate = desactivar;
+    // Comandos para ejecutar FachaScript Brackets
+    let runFachaScriptBracketsCommand = vscode.commands.registerCommand('fachascript.runFachaScriptBrackets', runFachaScriptBrackets);
+    let checkFachaScriptBracketsErrorsCommand = vscode.commands.registerCommand('fachascript.checkFachaScriptBracketsErrors', checkFachaScriptBracketsErrors);
+
+    context.subscriptions.push(runFachaScriptNormalCommand, checkFachaScriptNormalErrorsCommand, runFachaScriptBracketsCommand, checkFachaScriptBracketsErrorsCommand);
+}
+
+// Desactivar la extensión
+function deactivate() {}
+
+module.exports = {
+    activate,
+    deactivate
+};
