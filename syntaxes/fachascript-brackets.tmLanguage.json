@@ -1,15 +1,68 @@
 {
-    "fileTypes": ["fchs"],
-    "scopeName": "source.fachascript-brackets",
-    "patterns": [
-      {
-        "match": "(TODO)",
-        "name": "comment.line.todo.fachascript-brackets"
-      },
-      {
-        "match": "(\\b(if|else|while|return|function|var)\\b)",
-        "name": "keyword.control.fachascript-brackets"
-      }
-    ]
+  "name": "FachaScript Brackets",
+  "scopeName": "source.fachascript-brackets",
+  "fileTypes": ["fchs"],
+  "patterns": [
+    
+    {
+      "name": "comment.line.double-slash.fachascript",
+      "match": "//.*"
+    },
+
+    
+    {
+      "name": "keyword.control.fachascript",
+      "match": "\\b(imprimir|crear|asignar|sumar|restar|multiplicar|dividir|si|mientras|variable|funcion|Ruta|usuario|sistema|memoria_libre|cpu|lista_procesos|archivos|red_ip|modo_terminal|hoy|ahora|zona_horaria|facha_sistema|facha_ruta_script|facha_lenguage)\\b"
+    },
+
+    
+    {
+      "name": "variable.other.fachascript",
+      "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b"
+    },
+
+    
+    {
+      "name": "string.quoted.double.fachascript",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.fachascript",
+          "match": "\\\\."
+        }
+      ]
+    },
+
+    
+    {
+      "name": "constant.numeric.fachascript",
+      "match": "\\b\\d+(\\.\\d+)?\\b"
+    },
+
+    
+    {
+      "name": "keyword.operator.fachascript",
+      "match": "(\\+|-|\\*|/|=|==|!=|<|>|<=|>=)"
+    },
+    
+    {
+        "name": "punctuation.terminator.statement.fachascript",
+        "match": ";"
+    },
+     
+    {
+        "name": "punctuation.section.scope.begin.fachascript",
+        "match": "[{\\[(\\]})]"
+    }
+  ],
+  "colors": {
+    "comment": "#008000", 
+    "keyword": "#0000FF", 
+    "variable": "#008080", 
+    "string": "#A31515",   
+    "number": "#098658",    
+    "operator": "#800080",   
+    "punctuation": "#24292e" 
   }
-  
+}
