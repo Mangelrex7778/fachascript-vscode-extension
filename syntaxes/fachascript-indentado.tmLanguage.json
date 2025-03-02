@@ -3,25 +3,18 @@
   "scopeName": "source.fachascript-indentado",
   "fileTypes": ["fch", "facha"],
   "patterns": [
-    
     {
       "name": "comment.line.number-sign.fachascript",
       "match": "^\\s*#.*"
     },
-
-    
     {
       "name": "keyword.control.fachascript",
-      "match": "\\b(imprimir|crear|asignar|sumar|restar|multiplicar|dividir|si|mientras|variable|funcion|Ruta|usuario|sistema|memoria_libre|cpu|lista_procesos|archivos|red_ip|modo_terminal|hoy|ahora|zona_horaria|facha_sistema|facha_ruta_script|facha_lenguage)\\b"
+      "match": "\\b(imprimir|crear|asignar|sumar|restar|multiplicar|dividir|si|mientras|variable|funcion|Ruta|usuario|sistema|memoria_libre|cpu|lista_procesos|archivos|red_ip|modo_terminal|hoy|ahora|zona_horaria|facha_sistema|facha_ruta_script|facha_lenguage|limpiar|negar|retroceder|cerrar|lista|agregar|remover|longitud|invertir|ordenar|mezclar|abrir_archivo|leer_archivo|escribir_archivo|cerrar_archivo|mayusculas|minusculas|reemplazar|concatenar|potencia|raiz|redondear|esperar|temporizador|intentar|capturar|lanzar_error|json_parse|json_stringify|fecha_actual|hora_actual|contar|promedio|aleatorio|factorial|modulo|comparar)\\b"
     },
-
-    
     {
       "name": "variable.other.fachascript",
       "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b"
     },
-
-    
     {
       "name": "string.quoted.double.fachascript",
       "begin": "\"",
@@ -33,25 +26,21 @@
         }
       ]
     },
-
-    
     {
       "name": "constant.numeric.fachascript",
       "match": "\\b\\d+(\\.\\d+)?\\b"
     },
-
-    
     {
       "name": "keyword.operator.fachascript",
       "match": "(\\+|-|\\*|/|=|==|!=|<|>|<=|>=)"
-      }
+    }
   ],
   "colors": {
-    "comment": "#008000", 
-    "keyword": "#0000FF", 
-    "variable": "#008080", 
-    "string": "#A31515",   
-    "number": "#098658",    
-    "operator": "#800080"   
+    "comment": "#008000",
+    "keyword": "#FFFF00",
+    "variable": "#008080",
+    "string": "#A31515",
+    "number": "#098658",
+    "operator": "#800080"
   }
 }
