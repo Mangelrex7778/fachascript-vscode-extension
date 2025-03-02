@@ -1,33 +1,33 @@
 // fachascript_indentado_ejecutar.js
-// Intérprete para el lenguaje FachaScript
+// Intérprete para el lenguaje FachaScript Indentado
 
 const vscode = require('vscode');
 const fachascriptCommands = require('./fachascript_indentado.js');
 
 /**
- * Ejecuta el código FachaScript en el documento.
+ * Ejecuta el código FachaScript Indentado en el documento.
  * @param {vscode.TextDocument} document El documento que contiene el código FachaScript.
+ * @param {vscode.OutputChannel} outputWindow La ventana de salida para mostrar los resultados.
  */
-async function executeDocument(document) {
+async function executeDocument(document, outputWindow) {
     const text = document.getText();
     const lines = text.split('\n');
 
-    // Limpiar la consola de salida
     outputWindow.clear();
     outputWindow.show(true);
 
-    // Ejecutar cada línea como un comando
+    let variablesLocales = {}; // Variables locales para la ejecución
+
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i].trim();
 
-        // Ignorar líneas vacías y comentarios
         if (!line || line.startsWith('#')) {
             continue;
         }
 
         try {
-            // Analizar y ejecutar la línea
-            const result = await executeLine(line);
+            //Analizar y ejecutar la línea
+            const result = await executeLine(line, variablesLocales, outputWindow);
             if (result !== undefined) {
                 outputWindow.appendLine(result.toString());
             }
@@ -38,33 +38,105 @@ async function executeDocument(document) {
 }
 
 /**
- * Ejecuta una sola línea de código FachaScript.
+ * Ejecuta una sola línea de código FachaScript Indentado.
  * @param {string} line La línea de código a ejecutar.
+ * @param {object} variablesLocales Un objeto para almacenar las variables locales.
+ * @param {vscode.OutputChannel} outputWindow La ventana de salida para mostrar los resultados.
  * @returns {Promise<any>} El resultado de la ejecución.
  */
-async function executeLine(line) {
-    // Dividir la línea en comando y argumentos
+async function executeLine(line, variablesLocales, outputWindow) {
     const parts = line.split(' ');
     const commandName = parts[0];
     const args = parts.slice(1);
 
-    // Verificar si el comando existe
     if (!(commandName in fachascriptCommands)) {
         throw new Error(`Comando desconocido: "${commandName}"`);
     }
 
     const commandFunction = fachascriptCommands[commandName];
 
-    // Ejecutar el comando con los argumentos
+    //Manejar los argumentos según el comando
+    let result;
     try {
-        return await commandFunction(...args); // Spread syntax para pasar los argumentos
+        switch (commandName) {
+            case 'imprimir':
+            case 'crear':
+            case 'asignar':
+            case 'si':
+            case 'mientras':
+            case 'funcion':
+            case 'archivos':
+            case 'facha_ruta_script':
+            case 'limpiar':
+            case 'negar':
+            case 'retroceder':
+            case 'cerrar':
+            case 'fecha_actual':
+            case 'hora_actual':
+                result = await commandFunction();
+                break;
+            case 'sumar':
+            case 'restar':
+            case 'multiplicar':
+            case 'dividir':
+            case 'variable':
+            case 'ruta':
+            case 'aleatorio':
+            case 'modulo':
+                result = await commandFunction(args[0], args[1]);
+                break;
+            case 'lista':
+            case 'agregar':
+            case 'remover':
+            case 'longitud':
+            case 'invertir':
+            case 'ordenar':
+            case 'mezclar':
+            case 'abrir_archivo':
+            case 'leer_archivo':
+            case 'escribir_archivo':
+            case 'json_parse':
+            case 'json_stringify':
+            case 'contar':
+              result = await commandFunction(args[0]);
+              break;
+            case 'mayusculas':
+            case 'minusculas':
+            case 'reemplazar':
+            case 'concatenar':
+                result = await commandFunction(args[0], args[1], args[2]);
+                break;
+            case 'potencia':
+            case 'raiz':
+            case 'redondear':
+            case 'factorial':
+               result = await commandFunction(args[0]);
+               break;
+            case 'esperar':
+              result = await commandFunction(args[0]);
+                break;
+            case 'temporizador':
+                 result = await commandFunction();
+                  break;
+            case 'intentar':
+            case 'capturar':
+            case 'lanzar_error':
+              result = await commandFunction(args[0]);
+              break
+            case 'comparar':
+            result = await commandFunction(args[0], args[1]);
+              break
+            default:
+                result = await commandFunction();
+                break;
+        }
+
+        return result;
+
     } catch (error) {
         throw new Error(`Error al ejecutar el comando "${commandName}": ${error}`);
     }
 }
-
-// Crear una ventana de salida para mostrar los resultados
-const outputWindow = vscode.window.createOutputChannel('FachaScript Ejecución');
 
 module.exports = {
     executeDocument
