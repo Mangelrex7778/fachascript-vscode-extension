@@ -66,10 +66,10 @@ function validateCommandSyntax(line, lineNumber, diagnostics, document) {
         if (args.length !== 2) {
             addDiagnostic(lineNumber, `El comando "${commandName}" requiere 2 argumentos.`, vscode.DiagnosticSeverity.Error, diagnostics, document, line);
         }
-    } else if (['imprimir', 'crear', 'asignar', 'si', 'mientras', 'funcion', 'Archivos', 'Facha_ruta_script'].includes(commandName)) {
+    } else if (['imprimir', 'crear', 'asignar', 'si', 'mientras', 'funcion', 'Archivos', 'Facha_ruta_script', 'limpiar', 'negar', 'retroceder', 'cerrar'].includes(commandName)) {
         const args = line.split(' ').slice(1);
-        if (args.length !== 1) {
-            addDiagnostic(lineNumber, `El comando "${commandName}" requiere 1 argumento.`, vscode.DiagnosticSeverity.Error, diagnostics, document, line);
+        if (args.length !== 0) {
+            addDiagnostic(lineNumber, `El comando "${commandName}" no requiere argumentos.`, vscode.DiagnosticSeverity.Error, diagnostics, document, line);
         }
     }
 
