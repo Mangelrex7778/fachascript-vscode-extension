@@ -3,7 +3,7 @@
   "name": "fachascript",
   "displayName": "FachaScript",
   "description": "FachaScript es un lenguaje de programación con sintaxis simple y flexible.",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "publisher": "PibeEmojiStudios",
   "repository": {
     "type": "git",
@@ -136,8 +136,6 @@
     "prepublish": "vsce package"
   },
   "dependencies": {
-    "psutil": "^5.9.5",
-    "luxon": "^3.4.4",
-    "time": "^0.12.0"
+    "luxon": "^3.4.4"
   }
 }
