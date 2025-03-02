@@ -1,11 +1,11 @@
 // fachascript_indentado_error.js
-// Linter para el lenguaje FachaScript
+// Linter para el lenguaje FachaScript Indentado 2.0
 
 const vscode = require('vscode');
 const fachascriptCommands = require('./fachascript_indentado.js');
 
 /**
- * Analiza un documento de FachaScript y devuelve un array de diagnósticos (errores/advertencias).
+ * Analiza un documento de FachaScript Indentado y devuelve un array de diagnósticos (errores/advertencias).
  * @param {vscode.TextDocument} document El documento a analizar.
  * @returns {vscode.Diagnostic[]} Un array de objetos vscode.Diagnostic.
  */
@@ -16,29 +16,32 @@ function analyzeDocument(document) {
 
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i].trim();
+        const lineNumber = i;  // Guarda el número de línea actual
 
         // Ignorar líneas vacías y comentarios
         if (!line || line.startsWith('#')) {
             continue;
         }
 
-        // Reglas de validación (puedes agregar más)
-        validateCommandSyntax(line, i, diagnostics, document);
+        // Reglas de validación
+        validateLine(line, lineNumber, diagnostics, document);
     }
 
     return diagnostics;
 }
 
 /**
- * Valida la sintaxis de un comando en una línea.
+ * Valida una línea de código.
  * @param {string} line La línea de código a validar.
  * @param {number} lineNumber El número de línea.
  * @param {vscode.Diagnostic[]} diagnostics El array de diagnósticos.
  * @param {vscode.TextDocument} document El documento.
  */
-function validateCommandSyntax(line, lineNumber, diagnostics, document) {
+function validateLine(line, lineNumber, diagnostics, document) {
     // Extraer el nombre del comando (la primera palabra)
-    const commandName = line.split(' ')[0];
+    const parts = line.split(' ');
+    const commandName = parts[0];
+    const args = parts.slice(1);
 
     // Verificar si el comando existe
     if (!(commandName in fachascriptCommands)) {
@@ -46,30 +49,61 @@ function validateCommandSyntax(line, lineNumber, diagnostics, document) {
         return; // No continuar la validación si el comando no existe
     }
 
-    // Validar la cantidad de argumentos según el comando (ejemplo)
-    if (['sumar', 'restar', 'multiplicar', 'dividir'].includes(commandName)) {
-        const args = line.split(' ').slice(1);
-        if (args.length !== 2) {
-            addDiagnostic(lineNumber, `El comando "${commandName}" requiere 2 argumentos.`, vscode.DiagnosticSeverity.Error, diagnostics, document, line);
-        } else {
-            //Intentar convertirlos a números
-          if (isNaN(Number(args[0])) || isNaN(Number(args[1]))){
-            addDiagnostic(lineNumber, `El comando "${commandName}" requiere argumentos númericos.`, vscode.DiagnosticSeverity.Error, diagnostics, document, line);
-          }
-        }
-    } else if (['variable', 'Ruta'].includes(commandName)) {
-      const args = line.split(' ').slice(1);
-      if (args.length !== 2) {
-          addDiagnostic(lineNumber, `El comando "${commandName}" requiere 2 argumentos.`, vscode.DiagnosticSeverity.Error, diagnostics, document, line);
-      }
-    } else if (['imprimir', 'crear', 'asignar', 'si', 'mientras', 'funcion', 'Archivos', 'Facha_ruta_script'].includes(commandName)) {
-        const args = line.split(' ').slice(1);
-        if (args.length !== 1) {
-            addDiagnostic(lineNumber, `El comando "${commandName}" requiere 1 argumento.`, vscode.DiagnosticSeverity.Error, diagnostics, document, line);
-        }
-    }
+    // Validar la cantidad y tipo de argumentos
+    validateArguments(commandName, args, lineNumber, diagnostics, document, line);
 
-    // Agrega más validaciones para otros comandos aquí...
+    // Agregar validaciones adicionales aquí...
+}
+
+/**
+ * Valida la cantidad y tipo de argumentos según el comando.
+ * @param {string} commandName El nombre del comando.
+ * @param {string[]} args El array de argumentos.
+ * @param {number} lineNumber El número de línea.
+ * @param {vscode.Diagnostic[]} diagnostics El array de diagnósticos.
+ * @param {vscode.TextDocument} document El documento.
+ * @param {string} line La línea de código.
+ */
+function validateArguments(commandName, args, lineNumber, diagnostics, document, line) {
+    switch (commandName) {
+        case 'sumar':
+        case 'restar':
+        case 'multiplicar':
+        case 'dividir':
+            if (args.length !== 2) {
+                addDiagnostic(lineNumber, `El comando "${commandName}" requiere 2 argumentos.`, vscode.DiagnosticSeverity.Error, diagnostics, document, line);
+            } else {
+                if (isNaN(Number(args[0])) || isNaN(Number(args[1]))) {
+                    addDiagnostic(lineNumber, `El comando "${commandName}" requiere argumentos numéricos.`, vscode.DiagnosticSeverity.Error, diagnostics, document, line);
+                }
+            }
+            break;
+        case 'variable':
+        case 'Ruta':
+            if (args.length !== 2) {
+                addDiagnostic(lineNumber, `El comando "${commandName}" requiere 2 argumentos.`, vscode.DiagnosticSeverity.Error, diagnostics, document, line);
+            }
+            break;
+        case 'imprimir':
+        case 'crear':
+        case 'asignar':
+        case 'si':
+        case 'mientras':
+        case 'funcion':
+        case 'Archivos':
+        case 'Facha_ruta_script':
+        case 'limpiar':
+        case 'negar':
+        case 'retroceder':
+        case 'cerrar':
+            if (args.length !== 0) {
+                addDiagnostic(lineNumber, `El comando "${commandName}" no requiere argumentos.`, vscode.DiagnosticSeverity.Error, diagnostics, document, line);
+            }
+            break;
+        default:
+            // No hacer nada para comandos desconocidos (ya se detectaron antes)
+            break;
+    }
 }
 
 /**
