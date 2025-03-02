@@ -79,13 +79,13 @@ variable miLista = [1, 2, 3, 4, 5]
 imprimir miLista
 longitud(miLista)
 
-### Ejemplo de código (Con Llaves):
+### Ejemplo de código (Llaves):
 // Este es un comentario
 variable miLista = [1, 2, 3, 4, 5];
 imprimir miLista;
 longitud(miLista);
 
-Créditos
+### Créditos
 FachaScript fue creado por Pibe Emoji Studios, un estudio conocido por su trabajo en desarrollo de software, videojuegos y más.
 
 Copyright Pibe Emoji Studios 2025
