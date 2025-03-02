@@ -80,6 +80,76 @@ async function executeLine(line, variablesLocales, outputWindow) {
             case 'Ruta':
                 result = await commandFunction(args[0], args[1]);
                 break;
+           case 'limpiar':
+            case 'negar':
+            case 'retroceder':
+            case 'cerrar':
+                result = await commandFunction();
+                break;
+            case 'lista':
+            case 'agregar':
+            case 'remover':
+            case 'longitud':
+            case 'invertir':
+            case 'ordenar':
+            case 'mezclar':
+                result = await commandFunction(args[0]);
+                break;
+            case 'abrir_archivo':
+            case 'leer_archivo':
+            case 'escribir_archivo':
+             result = await commandFunction(args[0], args[1]);
+                break;
+            case 'mayusculas':
+            case 'minusculas':
+            case 'reemplazar':
+            case 'concatenar':
+                result = await commandFunction(args[0], args[1], args[2])
+                break
+            case 'potencia':
+            case 'raiz':
+            case 'redondear':
+                 result = await commandFunction(args[0]);
+                  break;
+            case 'esperar':
+                result = await commandFunction(args[0]);
+                 break
+            case 'temporizador':
+                result = await commandFunction();
+                break;
+            case 'intentar':
+            case 'capturar':
+            case 'lanzar_error':
+                 result = await commandFunction(args[0]);
+                 break;
+            case 'json_parse':
+            case 'json_stringify':
+                  result = await commandFunction(args[0]);
+                 break
+            case 'fecha_actual':
+                 result = await commandFunction();
+                break;
+            case 'hora_actual':
+                  result = await commandFunction();
+                   break;
+            case 'contar':
+               result = await commandFunction(args[0]);
+                  break;
+            case 'promedio':
+                  result = await commandFunction(args[0]);
+                   break;
+            case 'aleatorio':
+                 result = await commandFunction(args[0], args[1]);
+                break;
+            case 'factorial':
+                  result = await commandFunction(args[0]);
+                  break;
+            case 'modulo':
+                  result = await commandFunction(args[0], args[1]);
+                  break;
+            case 'comparar':
+                  result = await commandFunction(args[0], args[1]);
+                break
             default:
                 result = await commandFunction();
                 break;
